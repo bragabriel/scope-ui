@@ -8,16 +8,34 @@ import { Acao } from '../models/acao.model';
 })
 export class AcoesService {
   private acoes$ = new BehaviorSubject<Acao[]>([]);
-  
+
   constructor(private http: HttpClient) {
     this.carregarAcoes();
   }
 
   carregarAcoes(): void {
-    this.http.get<{ acoes: Acao[] }>('assets/data/acoes.json')
-      .subscribe(data => {
-        this.acoes$.next(data.acoes);
-      });
+    // 1) Prioriza localStorage (persistência local após adicionar/editar/excluir)
+    const saved = localStorage.getItem('acoes_scope');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed && Array.isArray(parsed.acoes)) {
+          this.acoes$.next(parsed.acoes);
+          return;
+        }
+      } catch (e) {
+        console.warn('Erro ao parsear localStorage acoes_scope', e);
+      }
+    }
+
+    // 2) Se não tiver localStorage, carrega do assets (caminho corrigido)
+    this.http.get<{ acoes: Acao[] }>('assets/data/acoes.json').subscribe({
+      next: data => this.acoes$.next(data?.acoes ?? []),
+      error: err => {
+        console.error('Erro ao carregar assets/acoes.json', err);
+        this.acoes$.next([]);
+      }
+    });
   }
 
   getAcoes(): Observable<Acao[]> {
@@ -25,17 +43,16 @@ export class AcoesService {
   }
 
   adicionarAcao(acao: Acao): void {
-    const acoes = this.acoes$.value;
-    acao.id = Math.max(...acoes.map(a => a.id), 0) + 1;
-    const novasAcoes = [...acoes, acao];
+    const acoes = this.acoes$.value || [];
+    const nextId = acoes.length ? Math.max(...acoes.map(a => a.id)) + 1 : 1;
+    const nova = { ...acao, id: nextId };
+    const novasAcoes = [...acoes, nova];
     this.acoes$.next(novasAcoes);
     this.salvarAcoes(novasAcoes);
   }
 
   editarAcao(acao: Acao): void {
-    const acoes = this.acoes$.value.map(a => 
-      a.id === acao.id ? acao : a
-    );
+    const acoes = this.acoes$.value.map(a => a.id === acao.id ? { ...acao } : a);
     this.acoes$.next(acoes);
     this.salvarAcoes(acoes);
   }
@@ -47,8 +64,6 @@ export class AcoesService {
   }
 
   private salvarAcoes(acoes: Acao[]): void {
-    // Simular salvamento em banco de dados
-    // Em produção, você faria uma chamada POST/PUT para um servidor
     localStorage.setItem('acoes_scope', JSON.stringify({ acoes }));
     console.log('Ações salvas localmente');
   }

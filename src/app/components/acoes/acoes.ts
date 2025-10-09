@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AcoesService } from '../../services/acoes.services';
@@ -13,7 +13,7 @@ import Chart from 'chart.js/auto';
   templateUrl: './acoes.html',
   styleUrl: './acoes.css'
 })
-export class AcoesComponent implements OnInit {
+export class AcoesComponent implements OnInit, AfterViewInit {
   @ViewChild('graficoCanvas') graficoCanvas?: ElementRef<HTMLCanvasElement>;
 
   acoes: Acao[] = [];
@@ -62,8 +62,14 @@ export class AcoesComponent implements OnInit {
   }
 
   carregarSetores(): void {
-    this.setoresService.getSetores().subscribe(data => {
-      this.setores = data.setores;
+    this.setoresService.getSetores().subscribe({
+      next: data => {
+        this.setores = data?.setores ?? [];
+      },
+      error: err => {
+        console.error('Erro ao carregar setores:', err);
+        this.setores = [];
+      }
     });
   }
 
