@@ -1,10 +1,12 @@
 <header class="header">
   <div class="header-container">
-    <div class="logo">
-      <h1>SCOPE</h1>
-      <p class="tagline">Seu Portfolio de Ações</p>
-    </div>
-    
+    <a routerLink="/" class="logo-link">
+      <div class="logo">
+        <h1>SCOPE</h1>
+        <p class="tagline">Seu Portfolio de Ações</p>
+      </div>
+    </a>
+
     <button class="menu-toggle" (click)="toggleMenu()">
       <span></span>
       <span></span>
@@ -14,10 +16,17 @@
     <nav class="navbar" [class.ativo]="menuAberto">
       <ul class="nav-list">
         <li>
-          <a 
-            routerLink="/acoes" 
-            routerLinkActive="ativo"
-            (click)="fecharMenu()">
+          <a routerLink="/acoes" routerLinkActive="ativo" (click)="fecharMenu()">
+            Ações
+          </a>
+        </li>
+        <li>
+          <a routerLink="/acoes" routerLinkActive="ativo" (click)="fecharMenu()">
+            Ações
+          </a>
+        </li>
+        <li>
+          <a routerLink="/acoes" routerLinkActive="ativo" (click)="fecharMenu()">
             Ações
           </a>
         </li>

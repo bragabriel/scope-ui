@@ -2,6 +2,7 @@
   max-width: 1200px;
   margin: 0 auto;
   animation: fadeIn 0.3s ease-in;
+  padding: 20px 0px 20px 0px;
 }
 
 @keyframes fadeIn {
@@ -18,9 +19,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
   border-bottom: 2px solid #e0e0e0;
+  padding: 20px 0px 20px 0px;
 }
 
 .header-acoes h2 {

@@ -17,6 +17,18 @@
   align-items: center;
 }
 
+.logo-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logo-link:hover {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
 .logo {
   display: flex;
   flex-direction: column;
