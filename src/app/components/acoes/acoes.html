@@ -1,0 +1,172 @@
+<div class="acoes-container">
+  <div class="header-acoes">
+    <h2>Meu Portfólio de Ações</h2>
+    <button class="btn btn-primary" (click)="abrirFormulario()" *ngIf="!mostrarFormulario">
+      ➕ Nova Ação
+    </button>
+  </div>
+
+  <!-- FORMULÁRIO -->
+  <div class="formulario-container" *ngIf="mostrarFormulario">
+    <div class="formulario">
+      <h3>{{ editando ? 'Editar Ação' : 'Nova Ação' }}</h3>
+      
+      <div class="form-group">
+        <label>Nome da Ação</label>
+        <input 
+          type="text" 
+          [(ngModel)]="novaAcao.nome" 
+          placeholder="Ex: ELET3"
+          class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label>Tag</label>
+        <input 
+          type="text" 
+          [(ngModel)]="novaAcao.tag" 
+          placeholder="Ex: Energia"
+          class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label>Setor</label>
+        <select 
+          [(ngModel)]="novaAcao.setor" 
+          (change)="atualizarSegmentos()"
+          class="form-input">
+          <option value="">Selecione um setor...</option>
+          <option *ngFor="let setor of setores" [value]="setor.nome">
+            {{ setor.nome }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Segmento</label>
+        <select 
+          [(ngModel)]="novaAcao.segmento" 
+          [disabled]="segmentosDisponiveis.length === 0"
+          class="form-input">
+          <option value="">Selecione um segmento...</option>
+          <option *ngFor="let segmento of segmentosDisponiveis" [value]="segmento">
+            {{ segmento }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Valor (R$)</label>
+        <input 
+          type="number" 
+          [(ngModel)]="novaAcao.valor" 
+          placeholder="0.00"
+          class="form-input">
+      </div>
+
+      <div class="form-buttons">
+        <button class="btn btn-success" (click)="salvarAcao()">Salvar</button>
+        <button class="btn btn-secondary" (click)="fecharFormulario()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRÁFICO -->
+  <div class="grafico-container" *ngIf="acoes.length > 0">
+    <h3>Diversificação da Carteira</h3>
+    <div class="grafico-wrapper">
+      <canvas #graficoCanvas></canvas>
+    </div>
+  </div>
+
+  <!-- RESUMO -->
+  <div class="resumo-container" *ngIf="acoes.length > 0">
+    <div class="resumo-card">
+      <h4>Total da Carteira</h4>
+      <p class="valor-total">R$ {{ calcularTotal().toLocaleString('pt-BR', { minimumFractionDigits: 2 }) }}</p>
+    </div>
+    <div class="resumo-card">
+      <h4>Quantidade de Ações</h4>
+      <p class="quantidade">{{ acoes.length }}</p>
+    </div>
+  </div>
+
+  <!-- FILTRO -->
+  <div class="filtro-container" *ngIf="acoes.length > 0">
+    <input 
+      type="text" 
+      [(ngModel)]="filtro" 
+      (input)="aplicarFiltro()"
+      placeholder="🔍 Filtrar por nome, tag, setor ou segmento..."
+      class="filtro-input">
+  </div>
+
+  <!-- TABELA -->
+  <div class="tabela-container" *ngIf="acoes.length > 0">
+    <table class="tabela-acoes">
+      <thead>
+        <tr>
+          <th (click)="ordenarTabela('acao')">
+            Nome da Ação 
+            <span class="sort-icon" *ngIf="ordenarPor === 'acao'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th (click)="ordenarTabela('tag')">
+            Tag 
+            <span class="sort-icon" *ngIf="ordenarPor === 'tag'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th (click)="ordenarTabela('setor')">
+            Setor 
+            <span class="sort-icon" *ngIf="ordenarPor === 'setor'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th (click)="ordenarTabela('segmento')">
+            Segmento 
+            <span class="sort-icon" *ngIf="ordenarPor === 'segmento'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th (click)="ordenarTabela('valor')">
+            Valor (R$) 
+            <span class="sort-icon" *ngIf="ordenarPor === 'valor'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th>% Carteira</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let acao of acoesFiltradas" class="tabela-row">
+          <td>{{ acao.nome }}</td>
+          <td>{{ acao.tag }}</td>
+          <td>{{ acao.setor }}</td>
+          <td>{{ acao.segmento }}</td>
+          <td class="valor-cell">R$ {{ acao.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) }}</td>
+          <td class="percentual-cell">{{ calcularPercentual(acao.valor) }}%</td>
+          <td class="acoes-cell">
+            <button class="btn btn-edit" (click)="editarAcao(acao)" title="Editar">✏️</button>
+            <button class="btn btn-delete" (click)="excluirAcao(acao.id)" title="Excluir">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="sem-resultados" *ngIf="acoesFiltradas.length === 0">
+      <p>Nenhuma ação encontrada com os filtros aplicados.</p>
+    </div>
+  </div>
+
+  <!-- MENSAGEM VAZIA -->
+  <div class="vazio" *ngIf="acoes.length === 0">
+    <h3>Sua carteira está vazia</h3>
+    <p>Comece adicionando ações para visualizar seu portfólio!</p>
+    <button class="btn btn-primary btn-grande" (click)="abrirFormulario()">
+      ➕ Adicionar Primeira Ação
+    </button>
+  </div>
+</div>

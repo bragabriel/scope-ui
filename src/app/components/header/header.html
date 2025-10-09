@@ -1,0 +1,27 @@
+<header class="header">
+  <div class="header-container">
+    <div class="logo">
+      <h1>SCOPE</h1>
+      <p class="tagline">Seu Portfolio de Ações</p>
+    </div>
+    
+    <button class="menu-toggle" (click)="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="navbar" [class.ativo]="menuAberto">
+      <ul class="nav-list">
+        <li>
+          <a 
+            routerLink="/acoes" 
+            routerLinkActive="ativo"
+            (click)="fecharMenu()">
+            Ações
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
