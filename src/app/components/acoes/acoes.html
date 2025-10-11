@@ -6,9 +6,11 @@
     </button>
   </div>
 
-  <!-- FORMULÁRIO -->
-  <div class="formulario-container" *ngIf="mostrarFormulario">
-    <div class="formulario">
+  <!-- MODAL/POP-UP FORMULÁRIO -->
+  <div class="modal-overlay" *ngIf="mostrarFormulario" (click)="fecharFormulario()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="fecharFormulario()">✕</button>
+      
       <h3>{{ editando ? 'Editar Ação' : 'Nova Ação' }}</h3>
       
       <div class="form-group">

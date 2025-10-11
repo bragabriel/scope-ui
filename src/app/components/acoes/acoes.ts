@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AcoesService } from '../../services/acoes.services';
@@ -13,7 +13,7 @@ import Chart from 'chart.js/auto';
   templateUrl: './acoes.html',
   styleUrl: './acoes.css'
 })
-export class AcoesComponent implements OnInit, AfterViewInit {
+export class AcoesComponent implements OnInit {
   @ViewChild('graficoCanvas') graficoCanvas?: ElementRef<HTMLCanvasElement>;
 
   acoes: Acao[] = [];
@@ -29,13 +29,13 @@ export class AcoesComponent implements OnInit, AfterViewInit {
   setores: Setor[] = [];
   segmentosDisponiveis: string[] = [];
 
-  novaAcao: Acao = {
+  novaAcao: any = {
     id: 0,
     nome: '',
     tag: '',
     setor: '',
     segmento: '',
-    valor: 0
+    valor: ''
   };
 
   chart: Chart | null = null;
@@ -62,36 +62,36 @@ export class AcoesComponent implements OnInit, AfterViewInit {
   }
 
   carregarSetores(): void {
-    this.setoresService.getSetores().subscribe({
-      next: data => {
-        this.setores = data?.setores ?? [];
-      },
-      error: err => {
-        console.error('Erro ao carregar setores:', err);
-        this.setores = [];
-      }
+    this.setoresService.getSetores().subscribe(data => {
+      this.setores = data.setores;
     });
   }
 
   carregarAcoes(): void {
-    this.acoeService.getAcoes().subscribe(acoes => {
-      this.acoes = acoes;
-      this.acoesFiltradas = [...this.acoes];
-      this.aplicarFiltro();
-      
-      setTimeout(() => {
-        if (this.graficoCanvas) {
-          this.atualizarGrafico();
-        }
-      }, 100);
-    });
+    this.acoeService.getAcoes().subscribe(
+      acoes => {
+        this.acoes = acoes;
+        this.acoesFiltradas = [...this.acoes];
+        this.aplicarFiltro();
+        
+        setTimeout(() => {
+          if (this.graficoCanvas) {
+            this.atualizarGrafico();
+          }
+        }, 100);
+      },
+      error => {
+        console.error('Erro ao carregar ações:', error);
+        alert('Erro ao conectar ao servidor!');
+      }
+    );
   }
 
   atualizarSegmentos(): void {
     if (this.novaAcao.setor) {
       const setor = this.setores.find(s => s.nome === this.novaAcao.setor);
       this.segmentosDisponiveis = setor ? setor.segmentos : [];
-      this.novaAcao.segmento = ''; // Limpar seleção anterior
+      this.novaAcao.segmento = '';
     } else {
       this.segmentosDisponiveis = [];
       this.novaAcao.segmento = '';
@@ -183,12 +183,10 @@ export class AcoesComponent implements OnInit, AfterViewInit {
     const dados = Array.from(setores.values());
     const coresArray = labels.map(label => cores.get(label)!);
 
-    // Destruir gráfico anterior se existir
     if (this.chart) {
       this.chart.destroy();
     }
 
-    // Criar novo gráfico
     const ctx = this.graficoCanvas.nativeElement.getContext('2d');
     if (ctx) {
       this.chart = new Chart(ctx, {
@@ -246,40 +244,82 @@ export class AcoesComponent implements OnInit, AfterViewInit {
       tag: '',
       setor: '',
       segmento: '',
-      valor: 0
+      valor: ''
     };
     this.segmentosDisponiveis = [];
   }
 
   editarAcao(acao: Acao): void {
+    console.log('Editando ação:', acao);
     this.mostrarFormulario = true;
     this.editando = true;
-    this.acaoEdicao = acao;
+    this.acaoEdicao = { ...acao };
     this.novaAcao = { ...acao };
     this.atualizarSegmentos();
+    console.log('Forma preenchido com:', this.novaAcao);
   }
 
-  salvarAcao(): void {
-    if (!this.novaAcao.nome || !this.novaAcao.setor || !this.novaAcao.segmento || this.novaAcao.valor <= 0) {
+ salvarAcao(): void {
+    console.log('Salvando ação:', this.novaAcao);
+    console.log('Editando?', this.editando);
+    console.log('acaoEdicao:', this.acaoEdicao);
+    
+    const valor = parseFloat(this.novaAcao.valor);
+    
+    if (!this.novaAcao.nome || !this.novaAcao.setor || !this.novaAcao.segmento || !this.novaAcao.valor || valor <= 0) {
       alert('Por favor, preencha todos os campos corretamente!');
       return;
     }
 
-    if (this.editando && this.acaoEdicao) {
-      this.novaAcao.id = this.acaoEdicao.id;
-      this.acoeService.editarAcao(this.novaAcao);
-    } else {
-      this.acoeService.adicionarAcao(this.novaAcao);
-    }
+    this.novaAcao.valor = valor;
 
-    this.fecharFormulario();
-    this.carregarAcoes();
+    if (this.editando && this.acaoEdicao) {
+      console.log('Entrando no modo EDIÇÃO');
+      this.novaAcao.id = this.acaoEdicao.id;
+      console.log('Enviando para editar:', this.novaAcao);
+      
+      this.acoeService.editarAcao(this.novaAcao).subscribe(
+        (response) => {
+          console.log('✓ Ação editada com sucesso:', response);
+          this.fecharFormulario();
+          this.carregarAcoes();
+        },
+        error => {
+          console.error('✗ Erro ao editar ação:', error);
+          alert('Erro ao editar ação!');
+        }
+      );
+    } else {
+      console.log('Entrando no modo ADICIONAR');
+      const maxId = this.acoes.length > 0 ? Math.max(...this.acoes.map(a => a.id)) : 0;
+      this.novaAcao.id = maxId + 1;
+      
+      this.acoeService.adicionarAcao(this.novaAcao).subscribe(
+        (response) => {
+          console.log('✓ Ação adicionada com sucesso:', response);
+          this.fecharFormulario();
+          this.carregarAcoes();
+        },
+        error => {
+          console.error('✗ Erro ao adicionar ação:', error);
+          alert('Erro ao adicionar ação!');
+        }
+      );
+    }
   }
 
   excluirAcao(id: number): void {
     if (confirm('Tem certeza que deseja excluir esta ação?')) {
-      this.acoeService.excluirAcao(id);
-      this.carregarAcoes();
+      this.acoeService.excluirAcao(id).subscribe(
+        () => {
+          console.log('✓ Ação excluída com sucesso');
+          this.carregarAcoes();
+        },
+        error => {
+          console.error('✗ Erro ao excluir ação:', error);
+          alert('Erro ao excluir ação!');
+        }
+      );
     }
   }
 
