@@ -1,0 +1,36 @@
+{
+  "tipos": [
+    {
+      "nome": "Fundo de Logística",
+      "segmentos": ["Galpões Logísticos", "Centros de Distribuição", "Terminais Portuários"]
+    },
+    {
+      "nome": "Fundo de Shopping",
+      "segmentos": ["Shopping Centers", "Outlets", "Centros Comerciais"]
+    },
+    {
+      "nome": "Fundo de Escritório",
+      "segmentos": ["Edifícios Comerciais", "Salas Corporativas", "Centros de Negócios"]
+    },
+    {
+      "nome": "Fundo Residencial",
+      "segmentos": ["Apartamentos", "Condomínios", "Residências"]
+    },
+    {
+      "nome": "Fundo Hospitalar",
+      "segmentos": ["Hospitais", "Clínicas", "Centros Médicos"]
+    },
+    {
+      "nome": "Fundo Hoteleiro",
+      "segmentos": ["Hotéis", "Resorts", "Apart-hotéis"]
+    },
+    {
+      "nome": "Fundo Multisegmento",
+      "segmentos": ["Diversos", "Híbrido", "Misto"]
+    },
+    {
+      "nome": "Fundo de Infraestrutura",
+      "segmentos": ["Rodovias", "Portos", "Energia"]
+    }
+  ]
+}

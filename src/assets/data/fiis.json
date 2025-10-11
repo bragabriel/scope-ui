@@ -1,0 +1,28 @@
+{
+  "fiis": [
+    {
+      "id": 1,
+      "nome": "HGLG11",
+      "tag": "Logística",
+      "tipo": "Fundo de Logística",
+      "segmento": "Galpões Logísticos",
+      "valor": 5000.00
+    },
+    {
+      "id": 2,
+      "nome": "MALL11",
+      "tag": "Varejo",
+      "tipo": "Fundo de Shopping",
+      "segmento": "Shopping Centers",
+      "valor": 3000.00
+    },
+    {
+      "id": 3,
+      "nome": "CSHG11",
+      "tag": "Híbrido",
+      "tipo": "Fundo Multisegmento",
+      "segmento": "Diversos",
+      "valor": 4500.00
+    }
+  ]
+}

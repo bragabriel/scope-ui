@@ -1,0 +1,174 @@
+<div class="fiis-container">
+  <div class="header-fiis">
+    <h2>Meus FIIs</h2>
+    <button class="btn btn-primary" (click)="abrirFormulario()" *ngIf="!mostrarFormulario">
+      ➕ Novo FII
+    </button>
+  </div>
+
+  <!-- MODAL/POP-UP FORMULÁRIO -->
+  <div class="modal-overlay" *ngIf="mostrarFormulario" (click)="fecharFormulario()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="fecharFormulario()">✕</button>
+      
+      <h3>{{ editando ? 'Editar FII' : 'Novo FII' }}</h3>
+      
+      <div class="form-group">
+        <label>Nome do FII</label>
+        <input 
+          type="text" 
+          [(ngModel)]="novoFii.nome" 
+          placeholder="Ex: HGLG11"
+          class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label>Tag</label>
+        <input 
+          type="text" 
+          [(ngModel)]="novoFii.tag" 
+          placeholder="Ex: Logística"
+          class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label>Tipo de FII</label>
+        <select 
+          [(ngModel)]="novoFii.tipo" 
+          (change)="atualizarSegmentos()"
+          class="form-input">
+          <option value="">Selecione um tipo...</option>
+          <option *ngFor="let tipo of tipos" [value]="tipo.nome">
+            {{ tipo.nome }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Segmento</label>
+        <select 
+          [(ngModel)]="novoFii.segmento" 
+          [disabled]="segmentosDisponiveis.length === 0"
+          class="form-input">
+          <option value="">Selecione um segmento...</option>
+          <option *ngFor="let segmento of segmentosDisponiveis" [value]="segmento">
+            {{ segmento }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Valor (R$)</label>
+        <input 
+          type="number" 
+          [(ngModel)]="novoFii.valor" 
+          placeholder="0.00"
+          class="form-input">
+      </div>
+
+      <div class="form-buttons">
+        <button class="btn btn-success" (click)="salvarFii()">Salvar</button>
+        <button class="btn btn-secondary" (click)="fecharFormulario()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRÁFICO -->
+  <div class="grafico-container" *ngIf="fiis.length > 0">
+    <h3>Diversificação de FIIs</h3>
+    <div class="grafico-wrapper">
+      <canvas #graficoCanvas></canvas>
+    </div>
+  </div>
+
+  <!-- RESUMO -->
+  <div class="resumo-container" *ngIf="fiis.length > 0">
+    <div class="resumo-card">
+      <h4>Total em FIIs</h4>
+      <p class="valor-total">R$ {{ calcularTotal().toLocaleString('pt-BR', { minimumFractionDigits: 2 }) }}</p>
+    </div>
+    <div class="resumo-card">
+      <h4>Quantidade de FIIs</h4>
+      <p class="quantidade">{{ fiis.length }}</p>
+    </div>
+  </div>
+
+  <!-- FILTRO -->
+  <div class="filtro-container" *ngIf="fiis.length > 0">
+    <input 
+      type="text" 
+      [(ngModel)]="filtro" 
+      (input)="aplicarFiltro()"
+      placeholder="🔍 Filtrar por nome, tag, tipo ou segmento..."
+      class="filtro-input">
+  </div>
+
+  <!-- TABELA -->
+  <div class="tabela-container" *ngIf="fiis.length > 0">
+    <table class="tabela-fiis">
+      <thead>
+        <tr>
+          <th (click)="ordenarTabela('nome')">
+            Nome do FII 
+            <span class="sort-icon" *ngIf="ordenarPor === 'nome'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th (click)="ordenarTabela('tag')">
+            Tag 
+            <span class="sort-icon" *ngIf="ordenarPor === 'tag'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th (click)="ordenarTabela('tipo')">
+            Tipo 
+            <span class="sort-icon" *ngIf="ordenarPor === 'tipo'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th (click)="ordenarTabela('segmento')">
+            Segmento 
+            <span class="sort-icon" *ngIf="ordenarPor === 'segmento'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th (click)="ordenarTabela('valor')">
+            Valor (R$) 
+            <span class="sort-icon" *ngIf="ordenarPor === 'valor'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th>% Portfolio</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let fii of fiisFiltradas" class="tabela-row">
+          <td>{{ fii.nome }}</td>
+          <td>{{ fii.tag }}</td>
+          <td>{{ fii.tipo }}</td>
+          <td>{{ fii.segmento }}</td>
+          <td class="valor-cell">R$ {{ fii.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) }}</td>
+          <td class="percentual-cell">{{ calcularPercentual(fii.valor) }}%</td>
+          <td class="acoes-cell">
+            <button class="btn btn-edit" (click)="editarFii(fii)" title="Editar">✏️</button>
+            <button class="btn btn-delete" (click)="excluirFii(fii.id)" title="Excluir">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="sem-resultados" *ngIf="fiisFiltradas.length === 0">
+      <p>Nenhum FII encontrado com os filtros aplicados.</p>
+    </div>
+  </div>
+
+  <!-- MENSAGEM VAZIA -->
+  <div class="vazio" *ngIf="fiis.length === 0">
+    <h3>Você ainda não tem FIIs</h3>
+    <p>Comece adicionando FIIs para visualizar seu portfólio!</p>
+    <button class="btn btn-primary btn-grande" (click)="abrirFormulario()">
+      ➕ Adicionar Primeiro FII
+    </button>
+  </div>
+</div>
