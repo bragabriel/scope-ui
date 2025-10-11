@@ -73,7 +73,6 @@
   text-align: center;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
-  margin-bottom: 4rem;
 }
 
 .hero-content h1 {
@@ -240,7 +239,7 @@
 .radar-card.info .radar-badge {
   background: #4488ff;
   color: white;
-} */
+}
 
 /* FEATURES SECTION (se ainda usar) */
 .features {
