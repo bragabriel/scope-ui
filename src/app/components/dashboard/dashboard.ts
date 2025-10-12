@@ -5,6 +5,7 @@ import { DashboardService, CarteiraTotal } from '../../services/dashboard.servic
 import { AcoesService } from '../../services/acoes.services';
 import { FiisService } from '../../services/fiis.services';
 import Chart from 'chart.js/auto';
+import { RendaFixaService } from 'src/app/services/renda-fixa.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,6 +24,8 @@ export class DashboardComponent implements OnInit {
   totalCarteira = 0;
   quantidadeAcoes = 0;
   quantidadeFiis = 0;
+  totalRendaFixa = 0;
+  quantidadeRendaFixa = 0;
 
   chartTotal: Chart | null = null;
   chartComparativo: Chart | null = null;
@@ -30,7 +33,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private dashboardService: DashboardService,
     private acoeService: AcoesService,
-    private fiisService: FiisService
+    private fiisService: FiisService,
+    private rendaFixaService: RendaFixaService
   ) {}
 
   ngOnInit(): void {
@@ -73,6 +77,11 @@ export class DashboardComponent implements OnInit {
 
     this.fiisService.getFiis().subscribe(fiis => {
       this.quantidadeFiis = fiis.length;
+    });
+
+    this.rendaFixaService.getRendasFixas().subscribe(rendasFixas => {
+      this.totalRendaFixa = rendasFixas.reduce((sum, rf) => sum + rf.valor, 0);
+      this.quantidadeRendaFixa = rendasFixas.length;
     });
   }
 

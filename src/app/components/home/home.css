@@ -241,6 +241,11 @@
   color: white;
 }
 
+.radar-card.opportunity .radar-badge {
+  background: #c9dd15;
+  color: white;
+}
+
 /* FEATURES SECTION (se ainda usar) */
 .features {
   padding: 4rem 2rem;

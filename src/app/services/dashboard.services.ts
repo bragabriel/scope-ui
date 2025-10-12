@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, combineLatest, map } from 'rxjs';
 import { AcoesService } from './acoes.services';
 import { FiisService } from './fiis.services';
+import { RendaFixaService } from './renda-fixa.service';
 
 export interface CarteiraTotalItem {
   tipo: string;
@@ -28,15 +29,17 @@ export class DashboardService {
 
   constructor(
     private acoeService: AcoesService,
-    private fiisService: FiisService
+    private fiisService: FiisService,
+    private rendaFixaService: RendaFixaService
   ) { }
 
   getCarteiraTotalizada(): Observable<CarteiraTotal> {
     return combineLatest([
       this.acoeService.getAcoes(),
-      this.fiisService.getFiis()
+      this.fiisService.getFiis(),
+      this.rendaFixaService.getRendasFixas()
     ]).pipe(
-      map(([acoes, fiis]) => {
+      map(([acoes, fiis, rendasFixas]) => {
         const items: CarteiraTotalItem[] = [];
         let total = 0;
 
@@ -62,6 +65,18 @@ export class DashboardService {
             cor: this.cores['FIIs']
           });
           total += totalFiis;
+        }
+
+        // Adicionar Renda Fixa
+        const totalRendaFixa = rendasFixas.reduce((sum, rf) => sum + rf.valor, 0);
+        if (totalRendaFixa > 0) {
+          items.push({
+            tipo: 'Renda Fixa',
+            valor: totalRendaFixa,
+            percentual: 0,
+            cor: this.cores['Renda Fixa']
+          });
+          total += totalRendaFixa;
         }
 
         // Calcular percentuais

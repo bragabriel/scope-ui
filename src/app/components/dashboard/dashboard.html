@@ -25,6 +25,13 @@
       <span class="label">{{ quantidadeFiis }} FIIs</span>
       <a routerLink="/fiis" class="link-card">Ver detalhes →</a>
     </div>
+
+    <div class="resumo-card">
+      <h3>Renda Fixa</h3>
+      <p class="valor">R$ {{ formatarMoeda(totalRendaFixa) }}</p>
+      <span class="label">{{ quantidadeRendaFixa }} aplicações</span>
+      <a routerLink="/renda-fixa" class="link-card">Ver detalhes →</a>
+    </div>
   </div>
 
   <!-- GRÁFICOS -->
@@ -83,6 +90,12 @@
         <div class="atalho-icon">⚠️</div>
         <h3>Radar</h3>
         <p>Dicas de investimento</p>
+      </a>
+
+      <a routerLink="/renda-fixa" class="atalho-card">
+        <div class="atalho-icon">💰</div>
+        <h3>Renda Fixa</h3>
+        <p>Gerenciar suas aplicações</p>
       </a>
     </div>
   </div>

@@ -1,0 +1,174 @@
+<div class="renda-fixa-container">
+  <div class="header-renda-fixa">
+    <h2>Minha Renda Fixa</h2>
+    <button class="btn btn-primary" (click)="abrirFormulario()" *ngIf="!mostrarFormulario">
+      ➕ Nova Aplicação
+    </button>
+  </div>
+
+  <!-- MODAL/POP-UP FORMULÁRIO -->
+  <div class="modal-overlay" *ngIf="mostrarFormulario" (click)="fecharFormulario()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="fecharFormulario()">✕</button>
+
+      <h3>{{ editando ? 'Editar Renda Fixa' : 'Nova Aplicação' }}</h3>
+
+      <div class="form-group">
+        <label>Nome da Aplicação</label>
+        <input type="text" [(ngModel)]="novaRendaFixa.nome" placeholder="Ex: CDB Banco do Brasil" class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label>Tipo</label>
+        <select [(ngModel)]="novaRendaFixa.tipo" (change)="atualizarInstituicoes()" class="form-input">
+          <option value="">Selecione um tipo...</option>
+          <option *ngFor="let tipo of tipos" [value]="tipo.nome">
+            {{ tipo.nome }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Instituição</label>
+        <select [(ngModel)]="novaRendaFixa.instituicao" [disabled]="instituicoesDisponiveis.length === 0"
+          class="form-input">
+          <option value="">Selecione uma instituição...</option>
+          <option *ngFor="let instituicao of instituicoesDisponiveis" [value]="instituicao">
+            {{ instituicao }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Data de Vencimento</label>
+        <input type="date" [(ngModel)]="novaRendaFixa.dataVencimento" class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label>Taxa Anual (%)</label>
+        <input type="number" [(ngModel)]="novaRendaFixa.taxaAnual" placeholder="9.5" step="0.01" class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label>Valor Investido (R$)</label>
+        <input type="number" [(ngModel)]="novaRendaFixa.valor" placeholder="0.00" class="form-input">
+      </div>
+
+      <div class="form-buttons">
+        <button class="btn btn-success" (click)="salvarRendaFixa()">Salvar</button>
+        <button class="btn btn-secondary" (click)="fecharFormulario()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRÁFICO -->
+  <div class="grafico-container" *ngIf="rendasFixas.length > 0">
+    <h3>Diversificação de Renda Fixa</h3>
+    <div class="grafico-wrapper">
+      <canvas #graficoCanvas></canvas>
+    </div>
+  </div>
+
+  <!-- RESUMO -->
+  <div class="resumo-container" *ngIf="rendasFixas.length > 0">
+    <div class="resumo-card">
+      <h4>Total Investido</h4>
+      <p class="valor-total">R$ {{ calcularTotal().toLocaleString('pt-BR', { minimumFractionDigits: 2 }) }}</p>
+    </div>
+    <div class="resumo-card">
+      <h4>Quantidade de Aplicações</h4>
+      <p class="quantidade">{{ rendasFixas.length }}</p>
+    </div>
+  </div>
+
+  <!-- FILTRO -->
+  <div class="filtro-container" *ngIf="rendasFixas.length > 0">
+    <input type="text" [(ngModel)]="filtro" (input)="aplicarFiltro()"
+      placeholder="🔍 Filtrar por nome, tipo ou instituição..." class="filtro-input">
+  </div>
+
+  <!-- TABELA -->
+  <div class="tabela-container" *ngIf="rendasFixas.length > 0">
+    <table class="tabela-renda-fixa">
+      <thead>
+        <tr>
+          <th (click)="ordenarTabela('nome')">
+            Nome
+            <span class="sort-icon" *ngIf="ordenarPor === 'nome'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th (click)="ordenarTabela('tipo')">
+            Tipo
+            <span class="sort-icon" *ngIf="ordenarPor === 'tipo'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th (click)="ordenarTabela('instituicao')">
+            Instituição
+            <span class="sort-icon" *ngIf="ordenarPor === 'instituicao'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th (click)="ordenarTabela('taxa')">
+            Taxa Anual
+            <span class="sort-icon" *ngIf="ordenarPor === 'taxa'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th (click)="ordenarTabela('valor')">
+            Valor (R$)
+            <span class="sort-icon" *ngIf="ordenarPor === 'valor'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th>Rendimento Anual</th>
+          <th (click)="ordenarTabela('vencimento')">
+            Vencimento
+            <span class="sort-icon" *ngIf="ordenarPor === 'vencimento'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th>% Portfólio</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rf of rendasFixasFiltradas" class="tabela-row">
+          <td><strong>{{ rf.nome }}</strong></td>
+          <td>
+            <span class="badge" [ngClass]="getBadgeClass(rf.tipo)">
+              {{ rf.tipo }}
+            </span>
+          </td>
+          <td>{{ rf.instituicao }}</td>
+          <td class="taxa-cell">{{ rf.taxaAnual }}%</td>
+          <td class="valor-cell">R$ {{ rf.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) }}</td>
+          <td class="rendimento-cell">
+            R$
+            {{ calcularRendimentoAnual(rf.valor, rf.taxaAnual).toLocaleString('pt-BR', { minimumFractionDigits: 2 }) }}
+          </td>
+          <td class="vencimento-cell">{{ formatarData(rf.dataVencimento) }}</td>
+          <td class="percentual-cell">{{ calcularPercentual(rf.valor) }}%</td>
+          <td class="acoes-cell">
+            <button class="btn btn-edit" (click)="editarRendaFixa(rf)" title="Editar">✏️</button>
+            <button class="btn btn-delete" (click)="excluirRendaFixa(rf.id)" title="Excluir">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="sem-resultados" *ngIf="rendasFixasFiltradas.length === 0">
+      <p>Nenhuma renda fixa encontrada com os filtros aplicados.</p>
+    </div>
+  </div>
+
+  <!-- MENSAGEM VAZIA -->
+  <div class="vazio" *ngIf="rendasFixas.length === 0">
+    <h3>Você ainda não tem aplicações em Renda Fixa</h3>
+    <p>Comece adicionando aplicações para visualizar seu portfólio de renda fixa!</p>
+    <button class="btn btn-primary btn-grande" (click)="abrirFormulario()">
+      ➕ Adicionar Primeira Aplicação
+    </button>
+  </div>
+</div>

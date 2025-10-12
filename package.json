@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "server:acoes": "json-server --watch src/assets/data/acoes.json --port 3000",
     "server:fiis": "json-server --watch src/assets/data/fiis.json --port 3001",
-    "dev": "concurrently \"npm run server:acoes\" \"npm run server:fiis\" \"npm run start\""
+    "server:rendas-fixas": "json-server --watch src/assets/data/rendas-fixas.json --port 3002",
+    "dev": "concurrently \"npm run server:acoes\" \"npm run server:fiis\" \"npm run server:rendas-fixas\" \"npm run start\""
   },
   "prettier": {
     "printWidth": 100,

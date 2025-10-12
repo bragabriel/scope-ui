@@ -2,11 +2,11 @@
   "acoes": [
     {
       "id": "2",
-      "nome": "PETR4222",
-      "tag": "Petróleo",
-      "setor": "Bens Industriais",
-      "segmento": "Máquinas e Equipamentos",
-      "valor": 1600
+      "nome": "BBBBB",
+      "tag": "BBBBB",
+      "setor": "Consumo Não Cíclico",
+      "segmento": "Alimentos e Bebidas",
+      "valor": 10000
     },
     {
       "id": "3",
@@ -25,7 +25,7 @@
       "valor": 2500
     },
     {
-      "id": 5,
+      "id": "5",
       "nome": "AAA",
       "tag": "AAA",
       "setor": "Financeiro",
@@ -33,20 +33,12 @@
       "valor": 544
     },
     {
-      "id": 6,
+      "id": "6",
       "nome": "ELET3",
       "tag": "Energia",
       "setor": "Financeiro",
       "segmento": "Bancos",
       "valor": 5500
-    },
-    {
-      "id": 7,
-      "nome": "TESTE",
-      "tag": "AA",
-      "setor": "Saúde",
-      "segmento": "Hospitais e Clínicas",
-      "valor": 11111
     }
   ]
 }
