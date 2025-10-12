@@ -8,7 +8,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class FiisService {
-  private readonly apiUrl = 'http://localhost:3001/fiis';
+  private readonly apiUrl = 'http://localhost:3000/fiis';
   private fiisSubject = new BehaviorSubject<FII[]>([]);
 
   constructor(private http: HttpClient) {

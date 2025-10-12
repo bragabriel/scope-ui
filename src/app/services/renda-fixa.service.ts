@@ -8,7 +8,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class RendaFixaService {
-  private readonly apiUrl = 'http://localhost:3002/rendasFixas';
+  private readonly apiUrl = 'http://localhost:3000/rendasFixas';
   private rendasFixasSubject = new BehaviorSubject<RendaFixa[]>([]);
 
   constructor(private http: HttpClient) {

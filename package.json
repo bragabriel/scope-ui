@@ -9,7 +9,8 @@
     "server:acoes": "json-server --watch src/assets/data/acoes.json --port 3000",
     "server:fiis": "json-server --watch src/assets/data/fiis.json --port 3001",
     "server:rendas-fixas": "json-server --watch src/assets/data/rendas-fixas.json --port 3002",
-    "dev": "concurrently \"npm run server:acoes\" \"npm run server:fiis\" \"npm run server:rendas-fixas\" \"npm run start\""
+    "mock": "node server.js",
+    "dev": "concurrently \"npm run mock\" \"npm run start\""
   },
   "prettier": {
     "printWidth": 100,
@@ -45,6 +46,7 @@
     "@types/jasmine": "~5.1.0",
     "concurrently": "^9.2.1",
     "jasmine-core": "~5.9.0",
+    "json-server": "^0.17.3",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
