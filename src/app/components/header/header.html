@@ -16,6 +16,16 @@
     <nav class="navbar" [class.ativo]="menuAberto">
       <ul class="nav-list">
         <li>
+          <a routerLink="/home" routerLinkActive="ativo" (click)="fecharMenu()">
+            Home
+          </a>
+        </li>
+        <li>
+          <a routerLink="/dashboard" routerLinkActive="ativo" (click)="fecharMenu()">
+            Dashboard
+          </a>
+        </li>
+        <li>
           <a routerLink="/acoes" routerLinkActive="ativo" (click)="fecharMenu()">
             Ações
           </a>

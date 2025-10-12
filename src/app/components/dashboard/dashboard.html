@@ -1,0 +1,143 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Dashboard de Investimentos</h1>
+    <p class="subtitle">Visão panorâmica da sua carteira</p>
+  </div>
+
+  <!-- RESUMO TOTAL -->
+  <div class="resumo-total">
+    <div class="resumo-card total-card">
+      <h3>Total da Carteira</h3>
+      <p class="valor-grande">R$ {{ formatarMoeda(totalCarteira) }}</p>
+      <span class="label">{{ carteiraTotal?.items.length || 0 }} tipos de investimento</span>
+    </div>
+
+    <div class="resumo-card">
+      <h3>Ações</h3>
+      <p class="valor">R$ {{ formatarMoeda(totalAcoes) }}</p>
+      <span class="label">{{ quantidadeAcoes }} ações</span>
+      <a routerLink="/acoes" class="link-card">Ver detalhes →</a>
+    </div>
+
+    <div class="resumo-card">
+      <h3>FIIs</h3>
+      <p class="valor">R$ {{ formatarMoeda(totalFiis) }}</p>
+      <span class="label">{{ quantidadeFiis }} FIIs</span>
+      <a routerLink="/fiis" class="link-card">Ver detalhes →</a>
+    </div>
+  </div>
+
+  <!-- GRÁFICOS -->
+  <div class="graficos-section">
+    <!-- GRÁFICO DE PIZZA - DIVERSIFICAÇÃO TOTAL -->
+    <div class="grafico-card">
+      <div class="grafico-header">
+        <h2>Diversificação da Carteira</h2>
+        <p class="grafico-subtitle">Proporção de cada tipo de investimento</p>
+      </div>
+      <div class="grafico-wrapper">
+        <canvas #graficoTotalCanvas></canvas>
+      </div>
+      <div class="grafico-legenda" *ngIf="carteiraTotal">
+        <div class="legenda-item" *ngFor="let item of carteiraTotal.items">
+          <div class="legenda-color" [style.backgroundColor]="item.cor"></div>
+          <div class="legenda-info">
+            <span class="legenda-tipo">{{ item.tipo }}</span>
+            <span class="legenda-valor">
+              R$ {{ formatarMoeda(item.valor) }} ({{ item.percentual.toFixed(1) }}%)
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRÁFICO DE BARRAS - COMPARATIVO -->
+    <div class="grafico-card">
+      <div class="grafico-header">
+        <h2>Comparativo por Tipo</h2>
+        <p class="grafico-subtitle">Valores absolutos de cada categoria</p>
+      </div>
+      <div class="grafico-wrapper-horizontal">
+        <canvas #graficoComparativoCanvas></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ATALHOS RÁPIDOS -->
+  <div class="atalhos-section">
+    <h2>Atalhos Rápidos</h2>
+    <div class="atalhos-grid">
+      <a routerLink="/acoes" class="atalho-card">
+        <div class="atalho-icon">📈</div>
+        <h3>Ações</h3>
+        <p>Gerenciar suas ações</p>
+      </a>
+
+      <a routerLink="/fiis" class="atalho-card">
+        <div class="atalho-icon">🏢</div>
+        <h3>FIIs</h3>
+        <p>Gerenciar seus FIIs</p>
+      </a>
+
+      <a routerLink="/home" class="atalho-card">
+        <div class="atalho-icon">⚠️</div>
+        <h3>Radar</h3>
+        <p>Dicas de investimento</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- INSIGHTS -->
+  <div class="insights-section" *ngIf="carteiraTotal && carteiraTotal.items.length > 0">
+    <h2>Insights da Sua Carteira</h2>
+    <div class="insights-grid">
+      <div class="insight-card" *ngIf="totalAcoes > 0">
+        <h4>Maior Investimento</h4>
+        <p class="insight-text">{{ (totalAcoes > totalFiis ? 'Ações' : 'FIIs') }}</p>
+        <span class="insight-valor">
+          {{ (totalAcoes > totalFiis ? formatarMoeda(totalAcoes) : formatarMoeda(totalFiis)) }}
+        </span>
+      </div>
+
+      <div class="insight-card" *ngIf="quantidadeAcoes > 0">
+        <h4>Média por Ação</h4>
+        <p class="insight-text">Valor médio investido</p>
+        <span class="insight-valor">
+          R$ {{ formatarMoeda(totalAcoes / quantidadeAcoes) }}
+        </span>
+      </div>
+
+      <div class="insight-card" *ngIf="quantidadeFiis > 0">
+        <h4>Média por FII</h4>
+        <p class="insight-text">Valor médio investido</p>
+        <span class="insight-valor">
+          R$ {{ formatarMoeda(totalFiis / quantidadeFiis) }}
+        </span>
+      </div>
+
+      <div class="insight-card">
+        <h4>Total de Posições</h4>
+        <p class="insight-text">Ações + FIIs</p>
+        <span class="insight-valor">
+          {{ (quantidadeAcoes + quantidadeFiis) }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ESTADO VAZIO -->
+  <div class="vazio-estado" *ngIf="!carteiraTotal || carteiraTotal.items.length === 0">
+    <div class="vazio-content">
+      <h2>Sua carteira está vazia</h2>
+      <p>Comece adicionando ações ou FIIs para ver seu dashboard</p>
+      <div class="vazio-buttons">
+        <a routerLink="/acoes" class="btn btn-primary">
+          ➕ Adicionar Ação
+        </a>
+        <a routerLink="/fiis" class="btn btn-secondary">
+          ➕ Adicionar FII
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
