@@ -20,8 +20,7 @@ npm run dev
 
 Isso irá:
 - Subir o Angular (localhost:4200)
-- Rodar o JSON-server para ações (localhost:3000)
-- Rodar o JSON-server para FIIs (localhost:3001)
+- Rodar o JSON-server (localhost:3000)
 
 Acesse no navegador:
 
