@@ -12,7 +12,7 @@ Permite visualizar, adicionar, editar e excluir ativos, acompanhar valores e dis
 npm install
 ```
 
-2. Rode o projeto com backend fake e frontend juntos:
+2. Rode o projeto:
 
 ```bash
 npm run dev
