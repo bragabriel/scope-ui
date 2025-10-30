@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AcoesService } from '../../services/acoes.services';
-import { SetoresService, Setor } from '../../services/tipos-setores.service';
+import { SetoresService, Setor } from '../../services/types/tipos-setores.service';
 import { Acao } from '../../models/acao.model';
 import Chart from 'chart.js/auto';
 

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RendaFixaService } from '../../services/renda-fixa.service';
-import { TiposRendaFixaService, TipoRendaFixa } from '../../services/tipos-renda-fixa.service';
+import { TiposRendaFixaService, TipoRendaFixa } from '../../services/types/tipos-renda-fixa.service';
 import { RendaFixa } from '../../models/renda-fixa.model';
 import Chart from 'chart.js/auto';
 

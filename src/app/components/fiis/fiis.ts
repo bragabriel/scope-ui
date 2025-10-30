@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FiisService } from '../../services/fiis.services';
-import { TiposFiiService, TipoFII } from '../../services/tipos-fii.service';
+import { TiposFiiService, TipoFII } from '../../services/types/tipos-fii.service';
 import { FII } from '../../models/fii.model';
 import Chart from 'chart.js/auto';
 
