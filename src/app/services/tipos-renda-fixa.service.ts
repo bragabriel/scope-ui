@@ -14,7 +14,7 @@ export class TiposRendaFixaService {
   constructor(private http: HttpClient) { }
 
   getTipos(): Observable<{ tipos: TipoRendaFixa[] }> {
-    return this.http.get<{ tipos: TipoRendaFixa[] }>('assets/data/tipos-renda-fixa.json');
+    return this.http.get<{ tipos: TipoRendaFixa[] }>('assets/data-types/tipos-renda-fixa.json');
   }
 
   getInstituicoesPorTipo(tipo: string): Observable<string[]> {

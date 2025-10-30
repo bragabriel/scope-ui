@@ -13,9 +13,8 @@ export interface Setor {
 export class SetoresService {
   constructor(private http: HttpClient) {}
 
-  // caminho corrigido pra assets/setores.json
   getSetores(): Observable<{ setores: Setor[] }> {
-    return this.http.get<{ setores: Setor[] }>('assets/data/setores.json');
+    return this.http.get<{ setores: Setor[] }>('assets/data-types/tipos-setores.json');
   }
 
   getSegmentosPorSetor(setor: string): Observable<string[]> {
