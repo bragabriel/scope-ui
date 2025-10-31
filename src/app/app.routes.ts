@@ -4,6 +4,8 @@ import { HomeComponent } from './components/home/home';
 import { FiisComponent } from './components/fiis/fiis';
 import { DashboardComponent } from './components/dashboard/dashboard';
 import { RendaFixaComponent } from './components/renda-fixa/renda-fixa';
+import { CustosComponent } from './components/custos/custos';
+
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -11,5 +13,6 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'acoes', component: AcoesComponent },
   { path: 'fiis', component: FiisComponent },
-  { path: 'renda-fixa', component: RendaFixaComponent }
+  { path: 'renda-fixa', component: RendaFixaComponent },
+  { path: 'custos', component: CustosComponent }
 ];

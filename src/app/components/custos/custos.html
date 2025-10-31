@@ -1,0 +1,250 @@
+<div class="custos-container">
+  <div class="header-custos">
+    <h2>Controle de Custos</h2>
+    <div class="header-buttons">
+      <button class="btn btn-config" (click)="abrirFormularioDados()">
+        ⚙️ Configurar Dados
+      </button>
+      <button class="btn btn-primary" (click)="abrirFormulario()" *ngIf="!mostrarFormulario">
+        ➕ Novo Custo
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL DADOS FINANCEIROS -->
+  <div class="modal-overlay" *ngIf="mostrarFormularioDados" (click)="fecharFormularioDados()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="fecharFormularioDados()">✕</button>
+      
+      <h3>Configurar Dados Financeiros</h3>
+      
+      <div class="form-group">
+        <label>Salário Bruto (R$)</label>
+        <input 
+          type="number" 
+          [(ngModel)]="dadosFinanceiros.salarioBruto" 
+          placeholder="7300.00"
+          class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label>Salário Líquido (R$)</label>
+        <input 
+          type="number" 
+          [(ngModel)]="dadosFinanceiros.salarioLiquido" 
+          placeholder="5600.00"
+          class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label>Meta de Savings (%)</label>
+        <input 
+          type="number" 
+          [(ngModel)]="dadosFinanceiros.metaSavings" 
+          placeholder="60"
+          min="0"
+          max="100"
+          class="form-input">
+      </div>
+
+      <div class="form-buttons">
+        <button class="btn btn-success" (click)="salvarDadosFinanceiros()">Salvar</button>
+        <button class="btn btn-secondary" (click)="fecharFormularioDados()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL FORMULÁRIO CUSTO -->
+  <div class="modal-overlay" *ngIf="mostrarFormulario" (click)="fecharFormulario()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="fecharFormulario()">✕</button>
+      
+      <h3>{{ editando ? 'Editar Custo' : 'Novo Custo' }}</h3>
+      
+      <div class="form-group">
+        <label>Nome do Custo</label>
+        <input 
+          type="text" 
+          [(ngModel)]="novoCusto.nome" 
+          placeholder="Ex: Academia"
+          class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label>Categoria</label>
+        <select 
+          [(ngModel)]="novoCusto.categoria" 
+          class="form-input">
+          <option value="">Selecione uma categoria...</option>
+          <option *ngFor="let categoria of categorias" [value]="categoria">
+            {{ categoria }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Frequência</label>
+        <select 
+          [(ngModel)]="novoCusto.frequencia" 
+          class="form-input">
+          <option value="mensal">Mensal</option>
+          <option value="semanal">Semanal</option>
+          <option value="anual">Anual</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Valor (R$)</label>
+        <input 
+          type="number" 
+          [(ngModel)]="novoCusto.valor" 
+          placeholder="0.00"
+          class="form-input">
+      </div>
+
+      <div class="form-buttons">
+        <button class="btn btn-success" (click)="salvarCusto()">Salvar</button>
+        <button class="btn btn-secondary" (click)="fecharFormulario()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESUMO FINANCEIRO -->
+  <div class="resumo-financeiro">
+    <div class="resumo-card salario-card">
+      <h4>💰 Salário Bruto</h4>
+      <p class="valor-grande">R$ {{ formatarMoeda(dadosFinanceiros.salarioBruto) }}</p>
+    </div>
+
+    <div class="resumo-card liquido-card">
+      <h4>💵 Salário Líquido</h4>
+      <p class="valor-grande">R$ {{ formatarMoeda(dadosFinanceiros.salarioLiquido) }}</p>
+    </div>
+
+    <div class="resumo-card savings-card">
+      <h4>🎯 Meta de Savings ({{ dadosFinanceiros.metaSavings }}%)</h4>
+      <p class="valor-grande">R$ {{ formatarMoeda(calcularSavings()) }}</p>
+    </div>
+
+    <div class="resumo-card despesas-card">
+      <h4>📊 Despesas Mensais</h4>
+      <p class="valor-grande">R$ {{ formatarMoeda(calcularTotalMensal()) }}</p>
+    </div>
+
+    <div class="resumo-card disponivel-card" [class.negativo]="calcularDisponivel() < 0">
+      <h4>💳 Disponível</h4>
+      <p class="valor-grande">R$ {{ formatarMoeda(calcularDisponivel()) }}</p>
+      <span class="alerta" *ngIf="calcularDisponivel() < 0">⚠️ Gastos acima do salário!</span>
+    </div>
+  </div>
+
+  <!-- GRÁFICOS -->
+  <div class="graficos-custos">
+    <div class="grafico-card">
+      <h3>Despesas por Categoria</h3>
+      <div class="grafico-wrapper">
+        <canvas #graficoCategoriasCanvas></canvas>
+      </div>
+    </div>
+
+    <div class="grafico-card">
+      <h3>Visão Geral Financeira</h3>
+      <div class="grafico-wrapper">
+        <canvas #graficoDespesasCanvas></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTRO -->
+  <div class="filtro-container" *ngIf="custos.length > 0">
+    <input 
+      type="text" 
+      [(ngModel)]="filtro" 
+      (input)="aplicarFiltro()"
+      placeholder="🔍 Filtrar por nome ou categoria..."
+      class="filtro-input">
+  </div>
+
+  <!-- TABELA -->
+  <div class="tabela-container" *ngIf="custos.length > 0">
+    <table class="tabela-custos">
+      <thead>
+        <tr>
+          <th (click)="ordenarTabela('nome')">
+            Nome 
+            <span class="sort-icon" *ngIf="ordenarPor === 'nome'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th (click)="ordenarTabela('categoria')">
+            Categoria 
+            <span class="sort-icon" *ngIf="ordenarPor === 'categoria'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th (click)="ordenarTabela('frequencia')">
+            Frequência 
+            <span class="sort-icon" *ngIf="ordenarPor === 'frequencia'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th (click)="ordenarTabela('valor')">
+            Valor Original 
+            <span class="sort-icon" *ngIf="ordenarPor === 'valor'">
+              {{ ordemAscendente ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th>Valor Mensal</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let custo of custosFiltrados" class="tabela-row">
+          <td><strong>{{ custo.nome }}</strong></td>
+          <td>
+            <span class="badge" [ngClass]="'badge-' + custo.categoria.toLowerCase()">
+              {{ custo.categoria }}
+            </span>
+          </td>
+          <td>
+            <span class="frequencia-badge" [ngClass]="'freq-' + custo.frequencia">
+              {{ traduzirFrequencia(custo.frequencia) }}
+            </span>
+          </td>
+          <td class="valor-cell">R$ {{ formatarMoeda(custo.valor) }}</td>
+          <td class="valor-mensal-cell">
+            R$ {{ formatarMoeda(
+              custo.frequencia === 'mensal' ? custo.valor :
+              (custo.frequencia === 'semanal' ? (custo.valor * 4) :
+              (custo.frequencia === 'anual' ? (custo.valor / 12) : custo.valor))
+            ) }}
+          </td>
+          <td class="acoes-cell">
+            <button class="btn btn-edit" (click)="editarCusto(custo)" title="Editar">✏️</button>
+            <button class="btn btn-delete" (click)="excluirCusto(custo.id)" title="Excluir">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="total-row">
+          <td colspan="4"><strong>TOTAL MENSAL</strong></td>
+          <td class="total-valor"><strong>R$ {{ formatarMoeda(calcularTotalMensal()) }}</strong></td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div class="sem-resultados" *ngIf="custosFiltrados.length === 0">
+      <p>Nenhum custo encontrado com os filtros aplicados.</p>
+    </div>
+  </div>
+
+  <!-- ESTADO VAZIO -->
+  <div class="vazio" *ngIf="custos.length === 0">
+    <h3>Você ainda não tem custos cadastrados</h3>
+    <p>Comece adicionando seus gastos para controlar suas finanças!</p>
+    <button class="btn btn-primary btn-grande" (click)="abrirFormulario()">
+      ➕ Adicionar Primeiro Custo
+    </button>
+  </div>
+</div>
