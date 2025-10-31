@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CustosService } from '../../services/custos.services';
-import { Custo, DadosFinanceiros } from '../../models/custo.model';
+import { Custo } from '../../models/custo.model';
+import { DadosFinanceiros } from '../../models/dados-financeiros.model';
 import Chart from 'chart.js/auto';
 
 @Component({

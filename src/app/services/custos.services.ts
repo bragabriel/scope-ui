@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { Custo, DadosFinanceiros } from '../models/custo.model';
+import { Custo } from '../models/custo.model';
+import { DadosFinanceiros } from '../models/dados-financeiros.model';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
@@ -35,11 +36,9 @@ export class CustosService {
   }
 
   carregarDadosFinanceiros(): void {
-    this.http.get<DadosFinanceiros[]>(this.dadosFinanceirosUrl).subscribe(
+    this.http.get<DadosFinanceiros>(this.dadosFinanceirosUrl).subscribe(
       dados => {
-        if (dados && dados.length > 0) {
-          this.dadosFinanceirosSubject.next(dados[0]);
-        }
+        this.dadosFinanceirosSubject.next(dados);
       },
       error => {
         console.error('Erro ao carregar dados financeiros:', error);
@@ -87,8 +86,7 @@ export class CustosService {
   }
 
   atualizarDadosFinanceiros(dados: DadosFinanceiros): Observable<DadosFinanceiros> {
-    // json-server espera id 0 para o primeiro item do array
-    return this.http.put<DadosFinanceiros>(`${this.dadosFinanceirosUrl}/0`, dados).pipe(
+    return this.http.put<DadosFinanceiros>(this.dadosFinanceirosUrl, dados).pipe(
       tap(dadosAtualizados => {
         this.dadosFinanceirosSubject.next(dadosAtualizados);
       })

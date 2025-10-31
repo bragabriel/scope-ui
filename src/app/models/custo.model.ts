@@ -5,9 +5,3 @@ export interface Custo {
   frequencia: 'mensal' | 'semanal' | 'anual';
   categoria: string;
 }
-
-export interface DadosFinanceiros {
-  salarioBruto: number;
-  salarioLiquido: number;
-  metaSavings: number; // em percentual
-}

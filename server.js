@@ -9,7 +9,7 @@ const middlewares = jsonServer.defaults()
 // Middleware para / para listar endpoints
 server.get('/', (req, res) => {
   res.json({
-    endpoints: ['/acoes', '/fiis', '/rendasFixas', '/custos']
+    endpoints: ['/acoes', '/fiis', '/rendasFixas', '/custos', '/dadosFinanceiros']
   })
 })
 
@@ -23,4 +23,5 @@ server.listen(3000, () => {
   console.log('   GET  http://localhost:3000/fiis')
   console.log('   GET  http://localhost:3000/rendasFixas')
   console.log('   GET  http://localhost:3000/custos')
+  console.log('   GET  http://localhost:3000/dadosFinanceiros')
 })
