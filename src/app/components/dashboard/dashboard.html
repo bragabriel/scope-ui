@@ -70,6 +70,100 @@
     </div>
   </div>
 
+  <!-- PROJEÇÕES -->
+  <div class="projecoes-section">
+    <h2>Projeções Financeiras</h2>
+    
+    <div class="projecoes-grid">
+      <!-- PROJEÇÃO DE META -->
+      <div class="projecao-card">
+        <h3>🎯 Projeção de Meta</h3>
+        <p class="projecao-subtitle">Calcule em quanto tempo atingirá sua meta financeira</p>
+        
+        <div class="form-projecao">
+          <div class="form-group-inline">
+            <label>Meta desejada (R$)</label>
+            <input 
+              type="number" 
+              [(ngModel)]="metaValor" 
+              placeholder="100000"
+              class="input-projecao">
+          </div>
+
+          <div class="form-group-inline">
+            <label>Rentabilidade anual (%)</label>
+            <input 
+              type="number" 
+              [(ngModel)]="rentabilidadeAnual" 
+              placeholder="0.8"
+              step="0.01"
+              class="input-projecao"
+              (change)="calcularRendaMensal()">
+          </div>
+
+          <div class="form-group-inline">
+            <label>Aporte mensal (R$)</label>
+            <input 
+              type="number" 
+              [(ngModel)]="aporteMensal" 
+              placeholder="1000"
+              class="input-projecao">
+          </div>
+
+          <button class="btn btn-calcular" (click)="calcularProjecao()">
+            Calcular Projeção
+          </button>
+        </div>
+
+        <div class="resultado-projecao" *ngIf="projecaoCalculada">
+          <div class="resultado-destaque">
+            <h4>Tempo estimado</h4>
+            <p class="tempo-meta">{{ formatarMeses(mesesParaMeta) }}</p>
+            <span class="info-adicional">
+              Saindo de R$ {{ formatarMoeda(totalCarteira) }} para R$ {{ formatarMoeda(metaValor) }}
+            </span>
+          </div>
+
+          <div class="grafico-projecao-wrapper" *ngIf="projecaoCalculada">
+            <canvas #graficoProjecaoCanvas></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJEÇÃO DE RENDA -->
+      <div class="projecao-card renda-card">
+        <h3>💰 Projeção de Renda Mensal</h3>
+        <p class="projecao-subtitle">Quanto sua carteira geraria de renda passiva?</p>
+        
+        <div class="renda-info">
+          <div class="renda-item">
+            <span class="renda-label">Carteira atual</span>
+            <span class="renda-valor">R$ {{ formatarMoeda(totalCarteira) }}</span>
+          </div>
+
+          <div class="renda-item">
+            <span class="renda-label">Rentabilidade anual da carteira</span>
+            <span class="renda-valor">{{ rentabilidadeAnual }}%</span>
+          </div>
+
+          <div class="renda-item destaque">
+            <span class="renda-label">Renda mensal projetada</span>
+            <span class="renda-valor-grande">R$ {{ formatarMoeda(rendaMensalProjetada) }}</span>
+          </div>
+
+          <div class="renda-item">
+            <span class="renda-label">Renda anual projetada</span>
+            <span class="renda-valor">R$ {{ formatarMoeda(rendaMensalProjetada * 12) }}</span>
+          </div>
+        </div>
+
+        <div class="renda-alert">
+          <p>💡 <strong>Dica:</strong> Insira a rentabilidade anual acima para ver a projeção atualizada</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ATALHOS RÁPIDOS -->
   <div class="atalhos-section">
     <h2>Atalhos Rápidos</h2>
