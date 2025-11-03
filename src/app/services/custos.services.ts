@@ -93,13 +93,12 @@ export class CustosService {
     );
   }
 
-  // Converter custos para mensal
   converterParaMensal(custo: Custo): number {
     switch (custo.frequencia) {
       case 'mensal':
         return custo.valor;
       case 'semanal':
-        return custo.valor * 4.33; // média de semanas por mês
+        return custo.valor * 4.33; 
       case 'anual':
         return custo.valor / 12;
       default:
