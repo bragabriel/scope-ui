@@ -39,6 +39,14 @@
       "setor": "Financeiro",
       "segmento": "Bancos",
       "valor": 5500
+    },
+    {
+      "id": 7,
+      "nome": "aaa",
+      "tag": "aa",
+      "setor": "Financeiro",
+      "segmento": "Gestoras de Investimentos",
+      "valor": 2222
     }
   ]
 }

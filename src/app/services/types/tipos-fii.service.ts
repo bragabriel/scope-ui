@@ -14,7 +14,7 @@ export class TiposFiiService {
   constructor(private http: HttpClient) { }
 
   getTipos(): Observable<{ tipos: TipoFII[] }> {
-    return this.http.get<{ tipos: TipoFII[] }>('assets/data-types/tipos-fii.json');
+    return this.http.get<{ tipos: TipoFII[] }>('assets/data-types/tipos-fiis.json');
   }
 
   getSegmentosPorTipo(tipo: string): Observable<string[]> {

@@ -10,33 +10,22 @@
   <div class="modal-overlay" *ngIf="mostrarFormulario" (click)="fecharFormulario()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <button class="modal-close" (click)="fecharFormulario()">✕</button>
-      
+
       <h3>{{ editando ? 'Editar FII' : 'Novo FII' }}</h3>
-      
+
       <div class="form-group">
         <label>Nome do FII</label>
-        <input 
-          type="text" 
-          [(ngModel)]="novoFii.nome" 
-          placeholder="Ex: HGLG11"
-          class="form-input">
+        <input type="text" [(ngModel)]="novoFii.nome" placeholder="Ex: HGLG11" class="form-input">
       </div>
 
       <div class="form-group">
         <label>Tag</label>
-        <input 
-          type="text" 
-          [(ngModel)]="novoFii.tag" 
-          placeholder="Ex: Logística"
-          class="form-input">
+        <input type="text" [(ngModel)]="novoFii.tag" placeholder="Ex: Logística" class="form-input">
       </div>
 
       <div class="form-group">
         <label>Tipo de FII</label>
-        <select 
-          [(ngModel)]="novoFii.tipo" 
-          (change)="atualizarSegmentos()"
-          class="form-input">
+        <select [(ngModel)]="novoFii.tipo" (change)="atualizarSegmentos()" class="form-input">
           <option value="">Selecione um tipo...</option>
           <option *ngFor="let tipo of tipos" [value]="tipo.nome">
             {{ tipo.nome }}
@@ -46,10 +35,7 @@
 
       <div class="form-group">
         <label>Segmento</label>
-        <select 
-          [(ngModel)]="novoFii.segmento" 
-          [disabled]="segmentosDisponiveis.length === 0"
-          class="form-input">
+        <select [(ngModel)]="novoFii.segmento" [disabled]="segmentosDisponiveis.length === 0" class="form-input">
           <option value="">Selecione um segmento...</option>
           <option *ngFor="let segmento of segmentosDisponiveis" [value]="segmento">
             {{ segmento }}
@@ -59,11 +45,7 @@
 
       <div class="form-group">
         <label>Valor (R$)</label>
-        <input 
-          type="number" 
-          [(ngModel)]="novoFii.valor" 
-          placeholder="0.00"
-          class="form-input">
+        <input type="number" [(ngModel)]="novoFii.valor" placeholder="0.00" class="form-input">
       </div>
 
       <div class="form-buttons">
@@ -95,12 +77,8 @@
 
   <!-- FILTRO -->
   <div class="filtro-container" *ngIf="fiis.length > 0">
-    <input 
-      type="text" 
-      [(ngModel)]="filtro" 
-      (input)="aplicarFiltro()"
-      placeholder="🔍 Filtrar por nome, tag, tipo ou segmento..."
-      class="filtro-input">
+    <input type="text" [(ngModel)]="filtro" (input)="aplicarFiltro()"
+      placeholder="🔍 Filtrar por nome, tag, tipo ou segmento..." class="filtro-input">
   </div>
 
   <!-- TABELA -->
@@ -109,31 +87,31 @@
       <thead>
         <tr>
           <th (click)="ordenarTabela('nome')">
-            Nome do FII 
+            Nome do FII
             <span class="sort-icon" *ngIf="ordenarPor === 'nome'">
               {{ ordemAscendente ? '▲' : '▼' }}
             </span>
           </th>
           <th (click)="ordenarTabela('tag')">
-            Tag 
+            Tag
             <span class="sort-icon" *ngIf="ordenarPor === 'tag'">
               {{ ordemAscendente ? '▲' : '▼' }}
             </span>
           </th>
           <th (click)="ordenarTabela('tipo')">
-            Tipo 
+            Tipo
             <span class="sort-icon" *ngIf="ordenarPor === 'tipo'">
               {{ ordemAscendente ? '▲' : '▼' }}
             </span>
           </th>
           <th (click)="ordenarTabela('segmento')">
-            Segmento 
+            Segmento
             <span class="sort-icon" *ngIf="ordenarPor === 'segmento'">
               {{ ordemAscendente ? '▲' : '▼' }}
             </span>
           </th>
           <th (click)="ordenarTabela('valor')">
-            Valor (R$) 
+            Valor (R$)
             <span class="sort-icon" *ngIf="ordenarPor === 'valor'">
               {{ ordemAscendente ? '▲' : '▼' }}
             </span>
