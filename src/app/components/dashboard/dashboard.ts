@@ -112,12 +112,12 @@ export class DashboardComponent implements OnInit {
 
     // Fórmula de valor futuro com aportes mensais
     // FV = PV * (1 + r)^n + PMT * [((1 + r)^n - 1) / r]
-    // Resolvendo para n (número de meses)
+    // Resolvendo para n (meses)
 
     const pv = this.totalCarteira;
     const fv = this.metaValor;
-    const rAnual = this.rentabilidadeAnual / 100; // 15% ao ano, por exemplo
-    const r = Math.pow(1 + rAnual, 1 / 12) - 1;     // taxa mensal equivalente
+    const rAnual = this.rentabilidadeAnual / 100; 
+    const r = Math.pow(1 + rAnual, 1 / 12) - 1;     
     const pmt = this.aporteMensal;
 
     if (r === 0) {
@@ -128,7 +128,7 @@ export class DashboardComponent implements OnInit {
       let n = 0;
       let valorAtual = pv;
 
-      while (valorAtual < fv && n < 600) { // máximo 50 anos
+      while (valorAtual < fv && n < 600) { 
         valorAtual = valorAtual * (1 + r) + pmt;
         n++;
       }
