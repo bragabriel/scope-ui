@@ -6,6 +6,8 @@
 
 💡 A ideia foi simples: para que continuar com planilhas, se podemos criar algo legal com IA?
 
+Acesse o vídeo completo aqui: [youtube.com/bragabriel-projeto-investimentos](https://www.youtube.com/watch?v=K9Xdvs86cyk)
+
 Usei o Claude Code pra acelerar o processo e mostrar o que dá para fazer de forma rápida :)
 
 ### 📋 O app permite gerenciar
