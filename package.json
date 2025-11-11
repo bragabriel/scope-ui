@@ -10,7 +10,8 @@
     "server:fiis": "json-server --watch src/assets/data/fiis.json --port 3001",
     "server:rendas-fixas": "json-server --watch src/assets/data/rendas-fixas.json --port 3002",
     "mock": "node server.js",
-    "dev": "concurrently \"npm run mock\" \"npm run start\""
+    "dev": "concurrently \"npm run mock\" \"npm run start\"",
+    "deploy": "ng build --configuration production --base-href /scope/ && npx angular-cli-ghpages --dir=dist/scope/browser"
   },
   "prettier": {
     "printWidth": 100,
@@ -44,6 +45,7 @@
     "@angular/cli": "^20.3.2",
     "@angular/compiler-cli": "^20.3.0",
     "@types/jasmine": "~5.1.0",
+    "angular-cli-ghpages": "^2.0.3",
     "concurrently": "^9.2.1",
     "jasmine-core": "~5.9.0",
     "json-server": "^0.17.3",
