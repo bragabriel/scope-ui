@@ -1,0 +1,36 @@
+{
+  "tipos": [
+    {
+      "nome": "CDB",
+      "instituicoes": ["Banco do Brasil", "Caixa", "Santander", "Itaú", "Bradesco", "Nubank"]
+    },
+    {
+      "nome": "Tesouro Direto",
+      "instituicoes": ["Tesouro Nacional", "Tesouro IPCA+", "Tesouro Prefixado", "Tesouro SELIC"]
+    },
+    {
+      "nome": "Poupança",
+      "instituicoes": ["Banco do Brasil", "Caixa", "Santander", "Itaú", "Bradesco", "Nubank"]
+    },
+    {
+      "nome": "LC (Letra de Câmbio)",
+      "instituicoes": ["Banco do Brasil", "Caixa", "Santander", "Itaú", "Bradesco"]
+    },
+    {
+      "nome": "LCI (Letra de Crédito Imobiliário)",
+      "instituicoes": ["Banco do Brasil", "Caixa", "Santander", "Itaú", "Bradesco"]
+    },
+    {
+      "nome": "LCA (Letra de Crédito do Agronegócio)",
+      "instituicoes": ["Banco do Brasil", "Caixa", "Santander", "Itaú", "Bradesco"]
+    },
+    {
+      "nome": "Debênture",
+      "instituicoes": ["Empresas Diversas", "Fundo de Investimento"]
+    },
+    {
+      "nome": "Fundo de Renda Fixa",
+      "instituicoes": ["Itaú", "Bradesco", "Santander", "BTG Pactual", "XP Investimentos"]
+    }
+  ]
+}

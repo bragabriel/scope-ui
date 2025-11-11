@@ -1,0 +1,52 @@
+{
+  "acoes": [
+    {
+      "id": "2",
+      "nome": "BBBBB",
+      "tag": "BBBBB",
+      "setor": "Consumo Não Cíclico",
+      "segmento": "Alimentos e Bebidas",
+      "valor": 10000
+    },
+    {
+      "id": "3",
+      "nome": "ITUB4",
+      "tag": "Banco",
+      "setor": "Financeiro",
+      "segmento": "Bancos",
+      "valor": 2000
+    },
+    {
+      "id": "4",
+      "nome": "VALE3",
+      "tag": "Mineração",
+      "setor": "Minerais e Metais",
+      "segmento": "Mineração",
+      "valor": 2500
+    },
+    {
+      "id": "5",
+      "nome": "AAA",
+      "tag": "AAA",
+      "setor": "Financeiro",
+      "segmento": "Bancos",
+      "valor": 544
+    },
+    {
+      "id": "6",
+      "nome": "ELET3",
+      "tag": "Energia",
+      "setor": "Financeiro",
+      "segmento": "Bancos",
+      "valor": 5500
+    },
+    {
+      "id": 7,
+      "nome": "aaa",
+      "tag": "aa",
+      "setor": "Financeiro",
+      "segmento": "Gestoras de Investimentos",
+      "valor": 2222
+    }
+  ]
+}
